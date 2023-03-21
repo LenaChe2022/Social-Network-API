@@ -1,0 +1,25 @@
+{
+  "name": "social-network-api",
+  "version": "1.0.0",
+  "description": "An API for a social network web application where users can share their thoughts, react to friends' thoughts, and create a friend list.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LenaChe2022/Social-Network-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LenaChe2022/Social-Network-API/issues"
+  },
+  "homepage": "https://github.com/LenaChe2022/Social-Network-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.9.2"
+  }
+}
