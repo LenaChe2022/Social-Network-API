@@ -1,6 +1,4 @@
-// ObjectId() method for converting usrerId string into an ObjectId for querying database
-const { ObjectId } = require('mongoose').Types;
-const { User, Friend, Thought } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
 //Get all thoughts
@@ -11,6 +9,7 @@ module.exports = {
     },
    
 //Create a new thought
+
 // example data
 //{
 //    "thoughtText": "Here's a cool thought...",
@@ -93,4 +92,40 @@ module.exports = {
         .catch((err) => res.status(500).json(err));
      }, 
 
+// Create a Reaction
+
+// example data
+//{
+//    "reactionBody": "absolutely!!!",
+//    "userName": "lernantino",
+//    "userId": "..."
+//  }    
+     createReaction(req,res) {
+        Thought.findOneAndUpdate(
+           { _id: req.params.thoughtId },
+           { $addToSet: { reactions: req.body } },
+           { runValidators: true, new: true }
+        )
+        .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with this id!' })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+     },
+ 
+     //Delete reaction
+     deleteReaction(req,res) {
+          Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId},
+            { $pull: {reactions: { reactionId: req.params.reactionId}}},
+            { runValidators: true, new: true }
+          )
+          .then((thought) =>
+          !thought
+            ? res.status(404).json({ message: 'No thought with this id!' })
+            : res.json({ message: 'Reaction successfully deleted!' })
+        )
+        .catch((err) => res.status(500).json(err));
+     },
 };
