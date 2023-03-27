@@ -1,8 +1,4 @@
 const { Schema, model } = require('mongoose');
-const Thought = require('./Thought');
-
-//validate property function for email
-const validator = require('validator');
 
 // Schema to create User model
 const userSchema = new Schema(
@@ -11,19 +7,22 @@ const userSchema = new Schema(
         type: String,
         required: true,
         unique: true,
-        //TODO Trimmed
+        //make Trimmed
+        trim: true,
         },
     email: {
         type: String,
         trim: true,
         lowercase: true,
         unique: true,
-        required: true,
+        required: [true, 'User email required'],
+        // Must match a valid email address 
         validate: {
-            validator: validator.isEmail,
-            message: '{VALUE} is not a valid email',
-            isAsync: false
-            },
+          validator: function(v) {
+            return /^([a-z0-9_.-]+)@([\da-z.-]+).([a-z.]{2,6})$/.test(v);
+          },
+          message: props => `${props.value} is not a valid email adress!`
+             },
         },
     thoughts: [
         {
@@ -39,8 +38,6 @@ const userSchema = new Schema(
     ]
   },
   {
-    // Mongoose supports two Schema options to transform Objects after querying MongoDb: toJSON and toObject.
-    // Here we are indicating that we want virtuals to be included with our response, overriding the default behavior
     toJSON: {
       virtuals: true,
     },
@@ -48,14 +45,14 @@ const userSchema = new Schema(
   }
 );
 
-//OK Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
+//Create a virtual called 'friendCount' that retrieves the length of the user's friends array field on query.
 userSchema
   .virtual('friendCount')
   .get(function () {
     return this.friends.length;
   })
 
-// Initialize our User model
+// Initialize my User model
 const User = model('user', userSchema);
 
 module.exports = User;

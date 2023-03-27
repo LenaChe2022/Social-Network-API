@@ -5,7 +5,9 @@ const {
   getSingleThought,
   updateThought,
   deleteThought,
-} = require('../../controllers/thoughtController.js');
+  createReaction,
+  deleteReaction,
+} = require('../../controllers/thoughtController');
 
 // /api/thoughts
 router.route('/').get(getThoughts).post(createThought);
@@ -16,13 +18,11 @@ router.route('/').get(getThoughts).post(createThought);
 //  "userId": "5edff358a0fcb779aa7b118b"
 //  }
 
-
 // /api/thoughts/:thoughtId
-router
-  .route('/:thoughtId')
-  .get(getSingleThought)
-  .put(updateThought)
-  .delete(deleteThought);
+router.route('/:thoughtId')
+   .get(getSingleThought)
+   .put(updateThought)
+   .delete(deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
 router.route('/:thoughtId/reactions').post(createReaction)

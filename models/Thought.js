@@ -7,15 +7,25 @@ const thoughtSchema = new Schema(
   thoughtText: {
     type: String,
     required: true,
-    //OK: Must be between 1 and 280 characters
     minlength: 1,
     maxlength: 280,
     },
   createdAt:{
     type: Date,
-//OK: Set default value to the current timestamp
+    //Set default value to the current timestamp
      default: Date.now,
-//OK: Use a getter method to format the timestamp on query
+    //Use a getter method to format the timestamp on query            
+          get: (date) => {
+            if (date) return date.toLocaleString('en-US',
+            {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true
+            });
+          },
   },  
   username: {
     type: String,
@@ -33,7 +43,7 @@ const thoughtSchema = new Schema(
 );
 
 // Create a virtual property `reactionCount` that gets the amount of reactions per thought
-postSchema.virtual('reactionCount').get(function () {
+thoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
   });  
 
